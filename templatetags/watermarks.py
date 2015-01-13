@@ -67,11 +67,15 @@ def make_watermark(im, mark, position, opacity=1):
     return Image.composite(layer, im, layer)
 
 
-def get_path(url, root=settings.MEDIA_ROOT, url_root=settings.MEDIA_URL):
+def get_path(url):
     """Makes a filesystem path from the specified URL"""
 
-    if url.startswith(url_root):
-        url = url[len(url_root):]  # strip media root url
+    if url.startswith(settings.MEDIA_URL):
+        root = settings.MEDIA_ROOT
+    else:
+        root = settings.STATIC_ROOT
+
+    url = url.replace(settings.MEDIA_URL, '').replace(settings.STATIC_URL, '')
 
     return os.path.normpath(os.path.join(root, url))
 
@@ -91,7 +95,8 @@ def watermark(url, wm_title):
     wm_url = os.path.join(basedir, '%s%s' % (base, ext))
     # path to save watermarked img
     wm_path = get_path(wm_url)
-    print wm_url, '\r\n'
+    print wm_url
+    print wm_path, '\r\n'
 
     try:
         watermark = models.Watermark.objects.get(title=wm_title, is_active=True)
@@ -108,12 +113,12 @@ def watermark(url, wm_title):
         os.makedirs(wm_dir)
 
     img_path = get_path(url)
+    print img_path, '<--img_path'
 
     # this is a cap((
     if not os.path.exists(img_path):
         return url
     img = Image.open(img_path)
-
 
     mark = Image.open(watermark.mark.path)
     if watermark.position == models.Watermark.CUSTOM:
