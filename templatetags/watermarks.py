@@ -87,7 +87,6 @@ def watermark(url, wm_title):
         if hasattr(url, 'url'):
             url = url.url
 
-    print url
     basedir = '%s/watermarked' % os.path.dirname(url)
     base, ext = os.path.splitext(os.path.basename(url))
 
@@ -95,8 +94,6 @@ def watermark(url, wm_title):
     wm_url = os.path.join(basedir, '%s%s' % (base, ext))
     # path to save watermarked img
     wm_path = get_path(wm_url)
-    print wm_url
-    print wm_path, '\r\n'
 
     try:
         watermark = models.Watermark.objects.get(title=wm_title, is_active=True)
@@ -113,7 +110,6 @@ def watermark(url, wm_title):
         os.makedirs(wm_dir)
 
     img_path = get_path(url)
-    print img_path, '<--img_path'
 
     # this is a cap((
     if not os.path.exists(img_path):
