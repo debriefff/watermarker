@@ -1,7 +1,6 @@
 # sudo apt-get install libjpeg-dev
 # pip install -I pillow
 # http://stackoverflow.com/questions/8915296/python-image-library-fails-with-message-decoder-jpeg-not-available-pil
-
 import os
 from django import template
 from django.db.models.fields.files import ImageFieldFile
@@ -86,6 +85,8 @@ def watermark(url, wm_title):
     if isinstance(url, ImageFieldFile):
         if hasattr(url, 'url'):
             url = url.url
+        else:
+            return url
 
     basedir = '%s/watermarked' % os.path.dirname(url)
     base, ext = os.path.splitext(os.path.basename(url))
