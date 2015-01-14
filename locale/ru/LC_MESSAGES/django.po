@@ -1,0 +1,92 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-01-14 14:32+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: models.py:7
+msgid "Opacity should be more 0 and less 1. This is a rule!"
+msgstr "Непрозрачность должна быть должна быть между 0 и 1. Это правило!"
+
+#: models.py:18
+msgid "tile"
+msgstr "плиточно"
+
+#: models.py:19
+msgid "scale"
+msgstr "масштабировано"
+
+#: models.py:20
+msgid "buttom right corner"
+msgstr "нижний правый угол"
+
+#: models.py:21
+msgid "top rigth corner"
+msgstr "верхний правый угол"
+
+#: models.py:22
+msgid "buttom left corner"
+msgstr "нижний левый угол"
+
+#: models.py:23
+msgid "top left corner"
+msgstr "верхний левый угол"
+
+#: models.py:24
+msgid "custom position"
+msgstr "задать руками"
+
+#: models.py:27
+msgid "Title"
+msgstr "Заголовок"
+
+#: models.py:28 models.py:55
+msgid "Watermark"
+msgstr ""
+
+#: models.py:29
+msgid "Opacity"
+msgstr "Непрозрачность"
+
+#: models.py:29
+msgid "Value must be between 0 and 1"
+msgstr "Значение должно быть от 0 до 1"
+
+#: models.py:30 models.py:52
+msgid "Position"
+msgstr "Расположение"
+
+#: models.py:31
+msgid "If you chose a custom position fill X and Y, please"
+msgstr "Если задаете координаты руками, то заполните Х и У, пожалуйста"
+
+#: models.py:34
+msgid "Is active"
+msgstr "Активна"
+
+#: models.py:35
+msgid "Update hard"
+msgstr "Агрессивно обновлять ватермарки"
+
+#: models.py:37
+msgid "Use it if you want to update all already created watermarks"
+msgstr "Используйте, если хотите обновить уже созданные ватермарки. Бьет по производительности"
+
+#: models.py:56
+msgid "Watermarks"
+msgstr ""
