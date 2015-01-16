@@ -8,6 +8,7 @@ from django.conf import settings
 from PIL import Image, ImageEnhance
 from watermarker import models
 from logging import error
+import urllib
 
 register = template.Library()
 
@@ -76,7 +77,7 @@ def get_path(url):
         root = settings.STATIC_ROOT
 
     url = url.replace(settings.MEDIA_URL, '').replace(settings.STATIC_URL, '')
-
+    url = urllib.unquote(url).decode("utf8")
     return os.path.normpath(os.path.join(root, url))
 
 
@@ -117,7 +118,6 @@ def watermark(url, wm):
 
     img_path = get_path(url)
 
-    # this is a cap((
     if not os.path.exists(img_path):
         return url
     try:
@@ -138,5 +138,5 @@ def watermark(url, wm):
     except Exception, e:
         error("Cant create watermark for %s. Error type: %s. Msg: %s" % (img_path, type(e), e))
         return url
-    
+
     return wm_url
