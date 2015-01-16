@@ -7,6 +7,7 @@ from django.db.models.fields.files import ImageFieldFile
 from django.conf import settings
 from PIL import Image, ImageEnhance
 from watermarker import models
+from logging import error
 
 register = template.Library()
 
@@ -90,6 +91,7 @@ def watermark(url, wm):
             return url
 
     # to work not only with strings
+
     if isinstance(url, ImageFieldFile):
         if hasattr(url, 'url'):
             url = url.url
@@ -118,19 +120,22 @@ def watermark(url, wm):
     # this is a cap((
     if not os.path.exists(img_path):
         return url
-    img = Image.open(img_path)
+    try:
+        img = Image.open(img_path)
 
-    mark = Image.open(watermark.mark.path)
-    if watermark.position == models.Watermark.CUSTOM:
-        x = watermark.x or 0
-        y = watermark.y or 0
-        position = (x, y)
-    else:
-        position = watermark.position
+        mark = Image.open(watermark.mark.path)
+        if watermark.position == models.Watermark.CUSTOM:
+            x = watermark.x or 0
+            y = watermark.y or 0
+            position = (x, y)
+        else:
+            position = watermark.position
 
-    opacity = watermark.opacity
+        opacity = watermark.opacity
 
-    marked_img = make_watermark(img, mark, position, opacity)
-    marked_img.save(wm_path)
+        marked_img = make_watermark(img, mark, position, opacity)
+        marked_img.save(wm_path)
+    except Exception, e:
+        error("Cant create watermark for %s. Error type: %s. Msg: %s" % (img_path, type(e), e))
 
     return wm_url
