@@ -80,7 +80,15 @@ def get_path(url):
 
 
 @register.filter
-def watermark(url, wm_title):
+def watermark(url, wm):
+    if isinstance(wm, models.Watermark):
+        watermark = wm
+    else:
+        try:
+            watermark = models.Watermark.objects.get(title=wm, is_active=True)
+        except (models.Watermark.DoesNotExist, models.Watermark.MultipleObjectsReturned):
+            return url
+
     # to work not only with strings
     if isinstance(url, ImageFieldFile):
         if hasattr(url, 'url'):
@@ -95,11 +103,6 @@ def watermark(url, wm_title):
     wm_url = os.path.join(basedir, '%s%s' % (base, ext))
     # path to save watermarked img
     wm_path = get_path(wm_url)
-
-    try:
-        watermark = models.Watermark.objects.get(title=wm_title, is_active=True)
-    except (models.Watermark.DoesNotExist, models.Watermark.MultipleObjectsReturned):
-        return url
 
     # not to do more than we need
     if os.path.exists(wm_path) and not watermark.update_hard:

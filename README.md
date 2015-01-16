@@ -32,9 +32,30 @@ Watermarker - это тулза для легкого, почти ванильн
     ```{% load watermarks %}```  
 B в нужном мете пользуемся фильтром:  
     ````<img src="{{ house.image.url|watermark:'wm_title' }}" alt="{{ house }}"/>```  
-    `wm_title` - имя для ватермарка, которое писали в графу Заголовок в админке.
+    `wm_title` - имя для ватермарка, которое писали в графу Заголовок в админке.  
 Должно работать с различными обрезалками:  
-    ``` <img src="{% thumbnail image.image|watermark:'wm_title' 160 110 crop=1 %}" alt=""/></a>```
+    ``` <img src="{% thumbnail image.image|watermark:'wm_title' 160 110 crop=1 %}" alt=""/></a>```  
+> Пока не дружим с easy_thumbnails  
+
+Если передавать как аргумент фильтру строку с названием ватермарка, то каждый раз, для каждой фотки приходится делать  
+запрос в БД, чтобы достать данные о водяном знаке. В целях производительности можно передать фильтру объект кдасса 
+Watermark, который предварительно один раз вычислить в шаблоне. 
+
+    Во views.py:
+    from watermarker.models import Watermark
+    
+    def get_context_data(self, **kwargs):
+        cd = super(Index, self).get_context_data()
+        cd['wm'] = Watermark.objects.get(title='wm_title', is_active=True)
+        return cd
+    
+    В шаблоне:
+    {% for o in lst %}
+        {% if o.img %}
+            <img src="{{ o.img.url|watermark:wm }}">
+        {% endif %}
+    {% endfor %}
+
 
 Рядом с файлами создается папка watermarked и изображения с водяными знаками склыдвываются туда. Так что исходные картинки не теряются
 
@@ -43,4 +64,4 @@ B в нужном мете пользуемся фильтром:
 
 ## Косяк
 По неведомым причинам пока не ставятся ватермарки на изображения с кириллическими именами, sorry :(  
-Пока не дружим с easy_thumbnails
+
