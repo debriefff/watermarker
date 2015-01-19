@@ -12,7 +12,6 @@ class Watermark(models.Model):
     TR = 'tr'
     BL = 'bl'
     TL = 'tl'
-    CUSTOM = 'custom'
 
     POSITIONS = (
         (TILE, _(u'tile')),
@@ -21,7 +20,6 @@ class Watermark(models.Model):
         (TR, _(u'top rigth corner')),
         (BL, _(u'buttom left corner')),
         (TL, _(u'top left corner')),
-        (CUSTOM, _(u'custom position')),
     )
 
     title = models.CharField(max_length=32, verbose_name=_(u'Title'), unique=True)
@@ -29,8 +27,8 @@ class Watermark(models.Model):
     opacity = models.FloatField(default=1, verbose_name=_(u'Opacity'), help_text=_(u'Value must be between 0 and 1'))
     position = models.CharField(max_length=8, verbose_name=_(u'Position'), choices=POSITIONS,
                                 help_text=_(u'If you chose a custom position fill X and Y, please'))
-    x = models.IntegerField(blank=True, null=True)
-    y = models.IntegerField(blank=True, null=True)
+    x = models.IntegerField(blank=True, null=True, verbose_name=_(u'Indent X'))
+    y = models.IntegerField(blank=True, null=True, verbose_name=_(u'Indent Y'))
     is_active = models.BooleanField(default=True, verbose_name=_(u'Is active'))
     update_hard = models.BooleanField(default=False, verbose_name=_(u'Update hard'),
                                       help_text=_(

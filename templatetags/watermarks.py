@@ -26,7 +26,7 @@ def reduce_opacity(im, opacity):
     return im
 
 
-def make_watermark(im, mark, position, opacity=1):
+def make_watermark(im, mark, position, opacity=1, shift=(0, 0)):
     """Adds a watermark to an image."""
     if opacity < 1:
         mark = reduce_opacity(mark, opacity)
@@ -48,22 +48,23 @@ def make_watermark(im, mark, position, opacity=1):
         mark = mark.resize((w, h))
         layer.paste(mark, ((im.size[0] - w) / 2, (im.size[1] - h) / 2))
     elif position == 'br':
-        x = max(im.size[0] - mark.size[0], 0)
-        y = max(im.size[1] - mark.size[1], 0)
+        x = max(im.size[0] - mark.size[0], 0) - shift[0]
+        y = max(im.size[1] - mark.size[1], 0) - shift[1]
         layer.paste(mark, (x, y))
     elif position == 'tr':
-        x = max(im.size[0] - mark.size[0], 0)
-        y = 0
+        x = max(im.size[0] - mark.size[0], 0) - shift[0]
+        y = 0 + shift[1]
         layer.paste(mark, (x, y))
     elif position == 'bl':
-        x = 0
-        y = max(im.size[1] - mark.size[1], 0)
+        x = 0 + shift[0]
+        y = max(im.size[1] - mark.size[1], 0) - shift[1]
         layer.paste(mark, (x, y))
     elif position == 'tl':
-        x = y = 0
+        x = 0 + shift[0]
+        y = 0 + shift[1]
         layer.paste(mark, (x, y))
     else:
-        layer.paste(mark, position)
+        layer.paste(mark, (0, 0))
     # composite the watermark with the layer
     return Image.composite(layer, im, layer)
 
@@ -124,16 +125,14 @@ def watermark(url, wm):
         img = Image.open(img_path)
 
         mark = Image.open(watermark.mark.path)
-        if watermark.position == models.Watermark.CUSTOM:
-            x = watermark.x or 0
-            y = watermark.y or 0
-            position = (x, y)
-        else:
-            position = watermark.position
+        x = watermark.x or 0
+        y = watermark.y or 0
+        shift = (x, y)
+        position = watermark.position
 
         opacity = watermark.opacity
 
-        marked_img = make_watermark(img, mark, position, opacity)
+        marked_img = make_watermark(img, mark, position, opacity, shift)
         marked_img.save(wm_path)
     except Exception, e:
         error("Cant create watermark for %s. Error type: %s. Msg: %s" % (img_path, type(e), e))
