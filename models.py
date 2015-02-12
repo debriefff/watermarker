@@ -27,18 +27,14 @@ class Watermark(models.Model):
     opacity = models.FloatField(default=1, verbose_name=_(u'Opacity'), help_text=_(u'Value must be between 0 and 1'))
     position = models.CharField(max_length=8, verbose_name=_(u'Position'), choices=POSITIONS,
                                 help_text=_(u'If you chose a custom position fill X and Y, please'))
-    x = models.IntegerField(blank=True, null=True, verbose_name=_(u'Indent X'))
-    y = models.IntegerField(blank=True, null=True, verbose_name=_(u'Indent Y'))
+    x = models.IntegerField(blank=True, null=True, verbose_name=_(u'Indent X'), default=0)
+    y = models.IntegerField(blank=True, null=True, verbose_name=_(u'Indent Y'), default=0)
     is_active = models.BooleanField(default=True, verbose_name=_(u'Is active'))
     update_hard = models.BooleanField(default=False, verbose_name=_(u'Update hard'),
-                                      help_text=_(
-                                          u'Use it if you want to update all already created watermarks'))
+                                      help_text=_(u'Use it if you want to update all already created watermarks'))
 
     def get_position(self):
-        if self.position == self.CUSTOM:
-            return (self.x, self.y)
-        else:
-            return self.get_position_display()
+        return self.get_position_display()
 
     def clean(self):
         if not 0 <= self.opacity <= 1:

@@ -3,7 +3,7 @@
 # http://stackoverflow.com/questions/8915296/python-image-library-fails-with-message-decoder-jpeg-not-available-pil
 import os
 from django import template
-from django.db.models.fields.files import ImageFieldFile
+from django.db.models.fields.files import ImageFieldFile, FileField, ImageField
 from django.conf import settings
 from PIL import Image, ImageEnhance
 from watermarker import models
@@ -84,6 +84,9 @@ def get_path(url):
 
 @register.filter
 def watermark(url, wm):
+    # return usual url(string) or ImageFieldFile
+    result_as_iff = False
+
     if isinstance(wm, models.Watermark):
         watermark = wm
     else:
@@ -93,8 +96,8 @@ def watermark(url, wm):
             return url
 
     # to work not only with strings
-
     if isinstance(url, ImageFieldFile):
+        result_as_iff = True
         if hasattr(url, 'url'):
             url = url.url
         else:
@@ -138,4 +141,16 @@ def watermark(url, wm):
         error("Cant create watermark for %s. Error type: %s. Msg: %s" % (img_path, type(e), e))
         return url
 
+    if result_as_iff:
+        return ImageFieldFile(instance=None, field=ImageField(), name=wm_path)
+
     return wm_url
+
+
+@register.filter
+def get_url_safe(path):
+    # If we save wm with result_as_iff == True, we thumbnail returns us full path to picture (not valid url)
+    # may be there is prettier way to manage this
+    if not path.startswith(settings.MEDIA_URL):
+        return os.path.join(settings.MEDIA_URL, path.split(settings.MEDIA_URL)[-1])
+    return path
