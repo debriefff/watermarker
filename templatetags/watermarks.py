@@ -1,20 +1,21 @@
-# sudo apt-get install libjpeg-dev
-# pip install -I pillow
-# http://stackoverflow.com/questions/8915296/python-image-library-fails-with-message-decoder-jpeg-not-available-pil
+# coding: utf-8
 import os
+import urllib
+from logging import error
+
 from django import template
-from django.db.models.fields.files import ImageFieldFile, FileField, ImageField
+from django.db.models.fields.files import ImageFieldFile, ImageField
 from django.conf import settings
 from PIL import Image, ImageEnhance
+
 from watermarker import models
-from logging import error
-import urllib
 
 register = template.Library()
 
 
 def reduce_opacity(im, opacity):
     """Returns an image with reduced opacity."""
+
     assert opacity >= 0 and opacity <= 1
     if im.mode != 'RGBA':
         im = im.convert('RGBA')
@@ -28,6 +29,7 @@ def reduce_opacity(im, opacity):
 
 def make_watermark(im, mark, position, opacity=1, shift=(0, 0)):
     """Adds a watermark to an image."""
+
     if opacity < 1:
         mark = reduce_opacity(mark, opacity)
     if im.mode != 'RGBA':
@@ -158,8 +160,11 @@ def watermark(url, wm):
 
 @register.filter
 def get_url_safe(path):
-    # If we save wm with result_as_iff == True, we thumbnail returns us full path to picture (not valid url)
-    # may be there is prettier way to manage this
+    """ If we save wm with result_as_iff == True, we thumbnail returns us full path to picture (not valid url)
+    may be there is prettier way to manage this
+
+    """
+
     if not path.startswith(settings.MEDIA_URL):
         return os.path.join(settings.MEDIA_URL, path.split(settings.MEDIA_URL)[-1])
     return path

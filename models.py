@@ -1,5 +1,5 @@
-from django.core.exceptions import ValidationError
 from django.db import models
+from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -25,8 +25,7 @@ class Watermark(models.Model):
     title = models.CharField(max_length=32, verbose_name=_(u'Title'), unique=True)
     mark = models.ImageField(upload_to='watermarks', verbose_name=_(u'Watermark'))
     opacity = models.FloatField(default=1, verbose_name=_(u'Opacity'), help_text=_(u'Value must be between 0 and 1'))
-    position = models.CharField(max_length=8, verbose_name=_(u'Position'), choices=POSITIONS,
-                                help_text=_(u'If you chose a custom position fill X and Y, please'))
+    position = models.CharField(max_length=8, verbose_name=_(u'Position'), choices=POSITIONS)
     x = models.IntegerField(blank=True, null=True, verbose_name=_(u'Indent X'), default=0)
     y = models.IntegerField(blank=True, null=True, verbose_name=_(u'Indent Y'), default=0)
     is_active = models.BooleanField(default=True, verbose_name=_(u'Is active'))
