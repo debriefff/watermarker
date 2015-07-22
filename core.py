@@ -99,6 +99,9 @@ def watermark(url, wm):
         except (models.Watermark.DoesNotExist, models.Watermark.MultipleObjectsReturned):
             return url
 
+    if not watermark.is_active:
+        return url
+
     # to work not only with strings
     if isinstance(url, ImageFieldFile):
         result_as_iff = True
