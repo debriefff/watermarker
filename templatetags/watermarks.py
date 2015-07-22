@@ -82,6 +82,12 @@ def get_path(url):
     return os.path.normpath(os.path.join(root, url))
 
 
+def make_iff_instance(path):
+    """ Returns ImageFieldFile for provided image path """
+
+    return ImageFieldFile(instance=None, field=ImageField(), name=path)
+
+
 @register.filter
 def watermark(url, wm):
     # return usual url(string) or ImageFieldFile
@@ -113,6 +119,8 @@ def watermark(url, wm):
 
     # not to do more than we need
     if os.path.exists(wm_path) and not watermark.update_hard:
+        if result_as_iff:
+            return make_iff_instance(wm_path)
         return wm_url
 
     # create a folder for watermarks if needed
@@ -124,6 +132,7 @@ def watermark(url, wm):
 
     if not os.path.exists(img_path):
         return url
+
     try:
         img = Image.open(img_path)
 
@@ -142,7 +151,7 @@ def watermark(url, wm):
         return url
 
     if result_as_iff:
-        return ImageFieldFile(instance=None, field=ImageField(), name=wm_path)
+        return make_iff_instance(wm_path)
 
     return wm_url
 
