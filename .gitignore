@@ -1,6 +1,2 @@
-
 .idea/
-.idea/*
-.idea
-*.pyc
-*.pyo
+*.py[c,o]
