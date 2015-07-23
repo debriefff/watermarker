@@ -1,8 +1,11 @@
 import os
 
-from setuptools import setup
+from distutils.core import setup
 
 import watermarker
+
+with open('README.md') as file:
+    long_description = file.read()
 
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
@@ -16,8 +19,8 @@ setup(
     license='BSD License',
     author='kirill',
     author_email='kirillkostuykhin@me.com',
-    description='A tool for easy working with watermarks in django projects',
-    long_description="",
+    description='A tool for easy working with w atermarks in django projects',
+    long_description=long_description,
     keywords="django, watermark, watermark, watermarker, image",
     install_requires=['pillow'],
     classifiers=[
