@@ -13,8 +13,13 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 setup(
     name='django-watermarker',
     version=watermarker.__version__,
-    packages=['watermarker'],
-    include_package_data=True,
+    packages=[
+        'watermarker',
+        'watermarker.templatetags',
+        'watermarker.locale',
+        'watermarker.locale.ru',
+        'watermarker.locale.ru.LC_MESSAGES',
+    ],
     url='https://github.com/Skycker/watermarker',
     license='BSD License',
     author='Kirill Kostyukhin',
