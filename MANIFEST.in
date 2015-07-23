@@ -1,5 +1,5 @@
 include LICENSE
 include README.md
 recursive-include watermarker/locale *
-recursive-include watermarker/templatetgs *
+recursive-include watermarker/templatetags *
 recursive-include watermarker/migrations *
