@@ -10,9 +10,9 @@ Watermarker - это тулза для легкого, почти ванильн
 * Django 1.6, 1.7, 1.8
 
 ## Подключение к проекту
-Как сабмодуль, поддержка pip в планах:    
+Установка через pip:
 
-    git submodule add https://github.com/Skycker/watermarker
+    pip install git+https://github.com/Skycker/watermarker@master
   
 ## Настройка  
 Добавляем приложение в `INSTALLED_APPS`:  
