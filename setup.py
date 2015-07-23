@@ -11,7 +11,7 @@ with open('pypi_doc.txt') as file:
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
-    name='watermarker',
+    name='django-watermarker',
     version=watermarker.__version__,
     packages=['watermarker'],
     include_package_data=True,

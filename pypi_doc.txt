@@ -9,4 +9,4 @@ How to install?
 
 .. code:: python
 
-    pip install watermarker
+    pip install django-watermarker

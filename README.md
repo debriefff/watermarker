@@ -14,7 +14,7 @@ It works with Jinja2 (django-jinja required)
 
 Via pip:
 
-    pip install git+https://github.com/Skycker/watermarker@master
+    pip install django-watermarker
 
 ## Setup 
  
