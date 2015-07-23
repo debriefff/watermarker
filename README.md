@@ -1,21 +1,24 @@
 Watermarker
 ==========
-Watermarker - это тулза для легкого, почти ванильного создания водяных знаков на картинках вашего проекта. Редактирование 
-положения водяных знаков происходит в админке. Под водяным знаком понимается картинка, поддержки текста пока нет.
-Работает с Jinja2 (требуется django-jinja).
+Watermarker is a tool for easy creating watermarks in you Django project. Editing takes place in the admin panel. 
+Watermarker put image (watermark) upon content images, text based watermarks support coming soon. 
 
-## Проверялось с
+It works with Jinja2 (django-jinja required)
+
+## Tested with
 
 * Python 2.7
 * Django 1.6, 1.7, 1.8
 
-## Подключение к проекту
-Установка через pip:
+## Install
+
+Via pip:
 
     pip install git+https://github.com/Skycker/watermarker@master
-  
-## Настройка  
-Добавляем приложение в `INSTALLED_APPS`:  
+
+## Setup 
+ 
+Add app name in  `INSTALLED_APPS`:  
 
     INSTALLED_APPS = (
         ...
@@ -23,42 +26,43 @@ Watermarker - это тулза для легкого, почти ванильн
         ...
     )
 
-*Для Django < 1.7*
+*For Django < 1.7*
 
     ./manage.py syncdb
     
-*Для Django >= 1.7*
+*For Django >= 1.7*
 
-В проекте приложены миграции
+There are migrations in project
 
     ./manage.py migrate
 
 ## WorkFlow  
-В панели администратора появляется модель `Watermrks`. Заходим создаем новый объект, заполняем. Особенно удобно при 
-необходимости ставить разные возяные знаки на страницах (в данном случае просто создаем несколько записей 
-в таблице `Watermrks`)
 
-Маленькие особенности:  
-    1. Заголовок (Title) набираем по-английски, он нам понадобится позже.  
-    2. Если в графе Позиция (Position) выбираем местоположение ваодяного знака
-    3. Для позиций по углам можно заполнить отступы по осям Х и У
-    4. В штатном режиме либа не перерисовывает уже созданные ватермарки. Но если очень хочется или поменялись настройки отображения знака, то
-        пункт Update hard вам поможет. Если он установлен в True, то при рендеринге страницы будут всегда перерисовываться ватермарки.
-        Не забудьте снять флаг после применнеия изменений, ибо производительность.  
-    5. Графа Is active работает как обычно. Это способ в один клин отключить ватермарку. При этом не нужно идти в код и что-то там менять
+After installation model `Watermarks` will appear in admin panel. Go there, create a new instance, edit it. It's very 
+useful if we need use different watermarks at site pages (this way just create several `Watermark`-instances)
 
-Водяные знаки накладываются в шаблонах. 
+Little features:  
+    1. Field `Title` indicates our watermark ( `wm_title` for example, we will use it a bit later)   
+    2. Upload watermark image (there is an example in repo to test)  
+    3. In `Position` choose place for watermarks  
+    4. For positions at corners you can tune X and Y indent  
+    5. Content images get their watermarks when page loads for the first time. By default the library does not redraw   
+       already created watermarks. If you need change it use `Update hard`. If it is `True` watermarker change   
+       watermarks for images every time when page loads. Be accurate! It decrease performance very much  
+    6. `Is active` is an easy way to switch watermark off. There is no necessity to change code  
 
-**Классический шаблонизатор Django**
+Watermarks are set to images in templates. 
 
-Импортируем и применяем шаблонный фильтр:  
+**Classic Django template engine**
+
+Import and use template filter:  
 
     {% load watermarks %}
     
     <img src="{{ image.img.url|watermark:'wm_title' }}" alt="{{ image.title }}">
     wm_title - имя для ватермарка, которое писали в графу Заголовок в админке.  
 
-Способ работы с `easy_thumbnails`:  
+The way to work with `easy_thumbnails`:  
 
     {% load thumbnail %}  
     {% load watermarks %}     
@@ -66,11 +70,11 @@ Watermarker - это тулза для легкого, почти ванильн
     {% thumbnail image.img|watermark:'wm_title' 160x160 as thumb %}
     <img src="{{ thumb.url|get_url_safe }}" alt="{{ image.title }}"/> 
 
-Если передавать как аргумент фильтру строку с названием ватермарка, то каждый раз, для каждой фотки приходится делать  
-запрос в БД, чтобы достать данные о водяном знаке. В целях производительности можно передать фильтру объект кдасса 
-`Watermark`, который предварительно один раз вычислить во вьюхе. Лучше использовать именно этот режим
+If provide watermark name in filter every time for every image system will make query to `Watermark` table in database
+to take data. To increase performance you can provide calculated in view instance of Watermark class. We recommend use 
+this mode if it is possible.
 
-    Во views.py:
+    In views.py:
     from watermarker.models import Watermark
     
     def get_context_data(self, **kwargs):
@@ -78,19 +82,20 @@ Watermarker - это тулза для легкого, почти ванильн
         cd['wm'] = Watermark.objects.get(title='wm_title')
         return cd
     
-    В шаблоне:
+    In template:
     <img src="{{ image.img.url|watermark:wm }}" alt="{{ image.title }}">
 
     {% thumbnail image.img|watermark:wm 160x160 as thumb %}
     <img src="{{ thumb.url|get_url_safe }}" alt="{{ image.title }}"/>
 
-Рядом с файлами создается папка `watermarked` и изображения с водяными знаками склыдвываются туда. 
-Так что исходные картинки не теряются. Если в какой-то момент водяные знаки надоели, то их можно отключить, 
-убрав галочку Is active. При этом менять что-то в коде нет необходимости
+Images with watermarks are kept in folder `watermark` which is created in your media directory.
 
-**Поддержка Jinja2**
+> original images are not deleted!
 
-Необходима предварительная установка `djngo-jinja`
+
+**Jinja2 support**
+
+`djngo-jinja` is required
     
     <img src="{{ image.img.url|watermark('wm_title') }}" alt="{{ image.title }}">
     <img src="{{ thumbnail(image.img|watermark('wm_title'), size=(160, 160))|get_url_safe() }}" alt="{{ image.title }}"/>
@@ -98,10 +103,17 @@ Watermarker - это тулза для легкого, почти ванильн
     <img src="{{ image.img.url|watermark(wm) }}" alt="{{ image.title }}">
     <img src="{{ thumbnail(image.img|watermark(wm), size=(160, 160))|get_url_safe() }}" alt="{{ image.title }}"/>
 
-## Требования
-Для нормального функционирования требуется PIL и вся толпа пакетов для него.
+## Localisation
 
-Если совсем не работает, то возможно не хватает пакетов для PIL:
+By default:  
+    * English  
+    * Russian  
+
+## Requirements
+
+For stable fork `pillow` is required.
+
+If smth wrong this list can possibly help:
 
     apt-get install libjpeg-dev
     http://stackoverflow.com/questions/8915296/python-image-library-fails-with-message-decoder-jpeg-not-available-pil
