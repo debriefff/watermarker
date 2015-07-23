@@ -43,7 +43,7 @@ useful if we need use different watermarks at site pages (this way just create s
 
 Little features:  
     1. Field `Title` indicates our watermark ( `wm_title` for example, we will use it a bit later)   
-    2. Upload watermark image (there is an example in repo to test)  
+    2. Upload watermark image  
     3. In `Position` choose place for watermarks  
     4. For positions at corners you can tune X and Y indent  
     5. Content images get their watermarks when page loads for the first time. By default the library does not redraw   
