@@ -51,6 +51,8 @@ Little features:
        watermarks for images every time when page loads. Be accurate! It decrease performance very much  
     6. `Is active` is an easy way to switch watermark off. There is no necessity to change code  
 
+[Admin interface example](https://habrastorage.org/files/0c7/14b/6eb/0c714b6eba8f424e94e63fe4429e52e7.png)
+
 Watermarks are set to images in templates. 
 
 **Classic Django template engine**
