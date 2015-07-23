@@ -1,0 +1,12 @@
+Documentation
+-------------
+
+Docs are available at GitHub https://github.com/Skycker/watermarker
+
+
+How to install?
+---------------
+
+.. code:: python
+
+    pip install watermarker

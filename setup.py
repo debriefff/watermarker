@@ -4,7 +4,7 @@ from distutils.core import setup
 
 import watermarker
 
-with open('README.md') as file:
+with open('pypi_doc.txt') as file:
     long_description = file.read()
 
 # allow setup.py to be run from any path
@@ -17,11 +17,10 @@ setup(
     include_package_data=True,
     url='https://github.com/Skycker/watermarker',
     license='BSD License',
-    author='kirill',
-    author_email='kirillkostuykhin@me.com',
-    description='A tool for easy working with w atermarks in django projects',
+    author='Kirill Kostyukhin',
+    description='A tool for easy working with watermarks in django projects',
     long_description=long_description,
-    keywords="django, watermark, watermark, watermarker, image",
+    keywords="django, watermark, watermarks, watermarker, image",
     install_requires=['pillow'],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
