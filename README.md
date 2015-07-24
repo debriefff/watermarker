@@ -62,7 +62,7 @@ Import and use template filter:
     {% load watermarks %}
     
     <img src="{{ image.img.url|watermark:'wm_title' }}" alt="{{ image.title }}">
-    wm_title - имя для ватермарка, которое писали в графу Заголовок в админке.  
+    wm_title - watermark name, from admin panel.  
 
 The way to work with `easy_thumbnails`:  
 
